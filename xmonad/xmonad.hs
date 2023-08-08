@@ -9,6 +9,7 @@ import XMonad.Hooks.StatusBar.PP
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.Ungrab
+import XMonad.Util.SpawnOnce
 
 import XMonad.Layout.Magnifier
 import XMonad.Layout.ThreeColumns
@@ -25,8 +26,10 @@ main = xmonad
 
 myConfig = def
     { modMask    = mod4Mask      -- Rebind Mod to the Super key
+    , terminal   = "alacritty"
     , layoutHook = myLayout      -- Use custom layouts
     , manageHook = myManageHook  -- Match on certain windows
+    , startupHook = myStartupHook
     }
   `additionalKeysP`
     [ ("M-S-z", spawn "xscreensaver-command -lock")
@@ -39,6 +42,10 @@ myManageHook = composeAll
     [ className =? "Gimp" --> doFloat
     , isDialog            --> doFloat
     ]
+
+myStartupHook = do
+    spawnOnce "which xmobar > /tmp/which_xmobar.txt"
+    spawnOnce "xmobar"
 
 myLayout = tiled ||| Mirror tiled ||| Full ||| threeCol
   where
