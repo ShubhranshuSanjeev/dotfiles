@@ -3,8 +3,8 @@
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = "shubhranshu.sanjeev";
-  home.homeDirectory = "/Users/shubhranshu.sanjeev";
+  home.username = "trividha";
+  home.homeDirectory = "/home/trividha";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -13,15 +13,14 @@
   # You should not change this value, even if you update Home Manager. If you do
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
-  home.stateVersion = "23.05"; # Please read the comment before changing.
+  home.stateVersion = "24.05"; # Please read the comment before changing.
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
+    brave
     direnv 
-    alacritty
     tree
-    git
     lazygit
     jq
     bat
@@ -30,10 +29,12 @@
     starship
     zellij
     fzf
-    wezterm
-    rustup
     git-extras
     ripgrep
+    htop
+    obs-studio
+    # qbittorrent
+    vlc
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -83,6 +84,24 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true; 
+
+  # programs.kitty = {
+  #   enable = true;
+  #   extraConfig = "include ~/.config/HyprV/kitty/mocha.conf";
+  #   settings = {
+  #     font_family = "jeybrains mono nerd font";
+  #     font_size = 10;
+  #     bold_font = "auto";
+  #     italic_font = "auto";
+  #     bold_italic_font = "auto";
+  #     mouse_hide_wait = "2.0";
+  #     cursor_shape = "block";
+  #     url_color = "#0087bd";
+  #     url_style = "dotted";
+  #     confirm_os_window_close = 0;
+  #     background_opacity = "0.7";
+  #   };
+  # };
 
   # Neovim Configuration
   programs.neovim = {

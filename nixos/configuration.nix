@@ -7,13 +7,19 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      # ./hardware-configuration.nix
+      # <home-manager/nixos>
     ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+
+  # nix.extraOptions = ''
+  #   experimental-features = nix-command flakes
+  # '';
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -39,53 +45,99 @@
   services.xserver.windowManager.xmonad = {
    enable = true;
    enableContribAndExtras = true;
-   config = builtins.readFile /root/.config/xmonad/xmonad.hs;
+   config = builtins.readFile /home/trividha/.config/xmonad/xmonad.hs;
    extraPackages = hpkgs: [
      hpkgs.xmobar
    ];
   };
+  # programs.hyprland = {
+  #   enable = true;
+  #   xwayland.enable = true;
+  # };
 
+  nixpkgs.config.allowUnfree = true;
 
   
 
   # Configure keymap in X11
-  services.xserver.layout = "us";
-  services.xserver.xkbOptions = "ctrl:swapcaps";
+  services.xserver.xkb.layout = "us";
+  services.xserver.xkb.options = "ctrl:swapcaps";
   # services.xserver.xkbOptions = "eurosign:e,caps:escape";
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
   # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  # sound.enable = true;
+  # hardware.pulseaudio.enable = true;
+  hardware.acpilight.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
+  # hardware.ipu6 = {
+  #   enable = true;
+  #   platform = "ipu6ep";
+  # };
+
+  services.blueman.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.trividha = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [
-      firefox
-      tree
-    ];
+    packages = with pkgs; [ ];
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    neovim
     wget
+    gh
     haskellPackages.xmobar
+    # home-manager
     alacritty
+    firefox
+    pavucontrol
+    xorg.xbacklight
+    brightnessctl
+    sysstat
   ];
+
+
+  fonts.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "FiraCode" "Iosevka" ]; })
+  ];
+
+  # home-manager.users.trividha = import /home/trividha/.config/home-manager/home.nix; 
 
   programs.git.enable = true;
   programs.ssh.startAgent = true;
 
+  ############################## Hyprland configs #####################################
+
+  programs = {
+    hyprland.enable = true;
+  };
+
+  ############################ Hyprland configs ends ##################################
+
+  hardware.graphics = {
+    enable = true;
+    # driSupport = true;
+    enable32Bit = true;
+    
+    extraPackages = with pkgs; [
+      intel-media-driver
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
+  };
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -116,7 +168,7 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "unstable"; # Did you read the comment?
 
 }
 

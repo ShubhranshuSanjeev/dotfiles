@@ -35,6 +35,7 @@ myConfig = def
     [ ("M-S-z", spawn "xscreensaver-command -lock")
     , ("M-C-s", unGrab *> spawn "scrot -s"        )
     , ("M-f"  , spawn "firefox"                   )
+    , ("M-c"  , spawn "brave"                     )
     ]
 
 myManageHook :: ManageHook

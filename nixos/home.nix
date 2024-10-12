@@ -1,0 +1,1 @@
+/home/trividha/dev/dotfiles/home-manager/home.nix
